@@ -1,329 +1,422 @@
 # Online Quiz Application for Engineering Students
 
+## index.html
+
 ```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Engineering Quiz Portal</title>
-  <style>
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-      font-family:Arial, sans-serif;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Engineering Quiz Portal</title>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family: Arial, sans-serif;
+        }
 
-    body{
-      background: linear-gradient(135deg,#000000,#001f3f,#003366,#000814);
-      color:white;
-      min-height:100vh;
-    }
+        body{
+            background: linear-gradient(135deg,#000000,#001f4d,#003366,#000000);
+            color:white;
+            min-height:100vh;
+        }
 
-    header{
-      background:rgba(0,0,0,0.8);
-      padding:20px;
-      text-align:center;
-      box-shadow:0 0 15px #00aaff;
-    }
+        .container{
+            width:90%;
+            max-width:1000px;
+            margin:auto;
+            padding:20px;
+        }
 
-    header h1{
-      color:#00bfff;
-      font-size:36px;
-    }
+        h1,h2,h3{
+            text-align:center;
+            margin-bottom:20px;
+        }
 
-    .container{
-      width:90%;
-      max-width:1200px;
-      margin:auto;
-      padding:20px;
-    }
+        .card{
+            background: rgba(255,255,255,0.08);
+            padding:25px;
+            border-radius:15px;
+            margin-top:20px;
+            box-shadow:0 0 15px rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+        }
 
-    .card{
-      background:rgba(255,255,255,0.08);
-      border:1px solid #00bfff;
-      padding:25px;
-      margin-top:20px;
-      border-radius:15px;
-      box-shadow:0 0 20px rgba(0,191,255,0.3);
-    }
+        input,select,button{
+            width:100%;
+            padding:12px;
+            margin-top:10px;
+            border:none;
+            border-radius:8px;
+        }
 
-    h2{
-      color:#00bfff;
-      margin-bottom:15px;
-    }
+        input,select{
+            background:#e6f0ff;
+        }
 
-    input, select, textarea{
-      width:100%;
-      padding:12px;
-      margin:10px 0;
-      border:none;
-      border-radius:8px;
-      background:#0f172a;
-      color:white;
-      border:1px solid #00bfff;
-    }
+        button{
+            background:#0066ff;
+            color:white;
+            font-size:16px;
+            cursor:pointer;
+            transition:0.3s;
+        }
 
-    button{
-      background:#00bfff;
-      color:black;
-      padding:12px 20px;
-      border:none;
-      border-radius:8px;
-      cursor:pointer;
-      font-weight:bold;
-      margin-top:10px;
-      transition:0.3s;
-    }
+        button:hover{
+            background:#0047b3;
+        }
 
-    button:hover{
-      background:#0099cc;
-      color:white;
-    }
+        .hidden{
+            display:none;
+        }
 
-    .question-box{
-      margin-top:20px;
-      padding:15px;
-      background:#08111f;
-      border-radius:10px;
-      border-left:5px solid #00bfff;
-    }
+        .question{
+            margin-bottom:20px;
+            padding:15px;
+            background:rgba(0,0,0,0.3);
+            border-radius:10px;
+        }
 
-    .question-box p{
-      font-size:18px;
-      margin-bottom:10px;
-    }
+        .question p{
+            margin-bottom:10px;
+            font-weight:bold;
+        }
 
-    .option{
-      margin:8px 0;
-    }
+        .option{
+            margin:8px 0;
+        }
 
-    .hidden{
-      display:none;
-    }
+        .score-box{
+            text-align:center;
+            font-size:28px;
+            color:#00ffcc;
+        }
 
-    .score{
-      font-size:24px;
-      color:#00ffcc;
-      text-align:center;
-      margin-top:20px;
-    }
+        .header{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-bottom:20px;
+        }
 
-    footer{
-      text-align:center;
-      padding:20px;
-      margin-top:40px;
-      background:black;
-      color:#00bfff;
-    }
-  </style>
+        .logout-btn{
+            width:auto;
+            padding:10px 20px;
+        }
+
+        .admin-note{
+            color:#66ccff;
+            text-align:center;
+            margin-top:10px;
+        }
+    </style>
 </head>
 <body>
 
-<header>
-  <h1>Engineering Online Quiz Application</h1>
-  <p>Subject Wise Quiz Portal for Engineering Students</p>
-</header>
-
 <div class="container">
 
-  <!-- Student Registration -->
-  <div class="card">
-    <h2>Student Registration</h2>
-    <input type="text" id="studentName" placeholder="Enter Student Name">
-    <input type="email" id="studentEmail" placeholder="Enter Email">
-    <button onclick="registerStudent()">Register</button>
-    <p id="registerMsg"></p>
-  </div>
+    <h1>Engineering Online Quiz Application</h1>
 
-  <!-- Subject Selection -->
-  <div class="card hidden" id="subjectSection">
-    <h2>Select Subject</h2>
-    <select id="subjectSelect">
-      <option value="">-- Select Subject --</option>
-      <option value="C Programming">C Programming</option>
-      <option value="Java">Java</option>
-      <option value="Python">Python</option>
-      <option value="Database Management">Database Management</option>
-    </select>
-    <button onclick="startQuiz()">Start Quiz</button>
-  </div>
+    <!-- Registration Section -->
+    <div class="card" id="registerSection">
+        <h2>Student Registration</h2>
 
-  <!-- Quiz Section -->
-  <div class="card hidden" id="quizSection">
-    <h2 id="quizTitle"></h2>
-    <div id="questionsContainer"></div>
-    <button onclick="submitQuiz()">Submit Quiz</button>
-    <div class="score" id="score"></div>
-  </div>
+        <input type="text" id="studentName" placeholder="Enter Student Name">
+        <input type="email" id="studentEmail" placeholder="Enter Email">
 
-  <!-- Admin Panel -->
-  <div class="card">
-    <h2>Admin Panel - Add Questions</h2>
+        <select id="subjectSelect">
+            <option value="">Select Subject</option>
+            <option value="c">C Programming</option>
+            <option value="java">Java</option>
+            <option value="dbms">DBMS</option>
+        </select>
 
-    <select id="adminSubject">
-      <option value="C Programming">C Programming</option>
-      <option value="Java">Java</option>
-      <option value="Python">Python</option>
-      <option value="Database Management">Database Management</option>
-    </select>
+        <button onclick="startQuiz()">Register & Start Quiz</button>
+    </div>
 
-    <textarea id="questionText" placeholder="Enter Question"></textarea>
-    <input type="text" id="option1" placeholder="Option 1">
-    <input type="text" id="option2" placeholder="Option 2">
-    <input type="text" id="option3" placeholder="Option 3">
-    <input type="text" id="option4" placeholder="Option 4">
-    <input type="text" id="correctAnswer" placeholder="Correct Answer">
+    <!-- Admin Login -->
+    <div class="card" id="adminLoginSection">
+        <h2>Admin Login</h2>
 
-    <button onclick="addQuestion()">Add Question</button>
-    <p id="adminMsg"></p>
-  </div>
+        <input type="text" id="adminUser" placeholder="Admin Username">
+        <input type="password" id="adminPass" placeholder="Admin Password">
+
+        <button onclick="adminLogin()">Login as Admin</button>
+
+        <p class="admin-note">Admin can add questions. Students cannot access admin panel.</p>
+    </div>
+
+    <!-- Admin Panel -->
+    <div class="card hidden" id="adminPanel">
+
+        <div class="header">
+            <h2>Admin Panel</h2>
+            <button class="logout-btn" onclick="logoutAdmin()">Logout</button>
+        </div>
+
+        <select id="adminSubject">
+            <option value="c">C Programming</option>
+            <option value="java">Java</option>
+            <option value="dbms">DBMS</option>
+        </select>
+
+        <input type="text" id="questionInput" placeholder="Enter Question">
+        <input type="text" id="option1" placeholder="Option 1">
+        <input type="text" id="option2" placeholder="Option 2">
+        <input type="text" id="option3" placeholder="Option 3">
+        <input type="text" id="option4" placeholder="Option 4">
+        <input type="text" id="correctAnswer" placeholder="Correct Answer">
+
+        <button onclick="addQuestion()">Add Question</button>
+
+    </div>
+
+    <!-- Quiz Section -->
+    <div class="card hidden" id="quizSection">
+        <h2 id="quizTitle"></h2>
+
+        <form id="quizForm"></form>
+
+        <button onclick="submitQuiz()">Submit Quiz</button>
+    </div>
+
+    <!-- Result Section -->
+    <div class="card hidden" id="resultSection">
+        <h2>Quiz Result</h2>
+        <div class="score-box" id="scoreBox"></div>
+    </div>
 
 </div>
 
-<footer>
-  © 2026 Engineering Quiz Portal | Blue & Black Theme Design
-</footer>
-
 <script>
 
-  let students = [];
+// Admin Credentials
+const ADMIN_USERNAME = "admin";
+const ADMIN_PASSWORD = "admin123";
 
-  let quizData = {
-    "C Programming": [],
-    "Java": [],
-    "Python": [],
-    "Database Management": []
-  };
+// Quiz Questions
+let quizData = {
 
-  // Default Questions
-  for(let i=1;i<=10;i++){
-    quizData["C Programming"].push({
-      question:`C Question ${i}`,
-      options:["Option A","Option B","Option C","Option D"],
-      answer:"Option A"
-    });
+    c:[
+        {
+            question:"1. Who developed C language?",
+            options:["Dennis Ritchie","James Gosling","Guido Van Rossum","Bjarne Stroustrup"],
+            answer:"Dennis Ritchie"
+        },
+        {
+            question:"2. Which symbol is used for comments in C?",
+            options:["//","<!-- -->","##","**"],
+            answer:"//"
+        },
+        {
+            question:"3. Which header file is used for printf()?",
+            options:["stdio.h","math.h","string.h","conio.h"],
+            answer:"stdio.h"
+        },
+        {
+            question:"4. Which loop executes at least once?",
+            options:["for","while","do while","none"],
+            answer:"do while"
+        },
+        {
+            question:"5. Which keyword is used to stop loop?",
+            options:["exit","stop","break","return"],
+            answer:"break"
+        }
+    ],
 
-    quizData["Java"].push({
-      question:`Java Question ${i}`,
-      options:["Option A","Option B","Option C","Option D"],
-      answer:"Option B"
-    });
+    java:[
+        {
+            question:"1. Java was developed by?",
+            options:["James Gosling","Dennis Ritchie","Bill Gates","Elon Musk"],
+            answer:"James Gosling"
+        },
+        {
+            question:"2. Java is a ____ language.",
+            options:["Compiled","Interpreted","Both","None"],
+            answer:"Both"
+        },
+        {
+            question:"3. Which keyword is used for inheritance?",
+            options:["implement","extends","inherit","using"],
+            answer:"extends"
+        },
+        {
+            question:"4. JVM stands for?",
+            options:["Java Variable Machine","Java Virtual Machine","Joint Virtual Machine","None"],
+            answer:"Java Virtual Machine"
+        },
+        {
+            question:"5. Which method starts Java program?",
+            options:["run()","main()","start()","init()"],
+            answer:"main()"
+        }
+    ],
 
-    quizData["Python"].push({
-      question:`Python Question ${i}`,
-      options:["Option A","Option B","Option C","Option D"],
-      answer:"Option C"
-    });
+    dbms:[
+        {
+            question:"1. DBMS stands for?",
+            options:["Database Management System","Data Backup Management System","Database Method System","None"],
+            answer:"Database Management System"
+        },
+        {
+            question:"2. Which language is used in DBMS?",
+            options:["SQL","HTML","CSS","Python"],
+            answer:"SQL"
+        },
+        {
+            question:"3. Primary key cannot contain?",
+            options:["Numbers","Duplicates","Unique Values","Characters"],
+            answer:"Duplicates"
+        },
+        {
+            question:"4. SQL stands for?",
+            options:["Structured Query Language","Simple Query Language","Sequential Query Language","None"],
+            answer:"Structured Query Language"
+        },
+        {
+            question:"5. Which command is used to retrieve data?",
+            options:["GET","SELECT","OPEN","SHOW"],
+            answer:"SELECT"
+        }
+    ]
+};
 
-    quizData["Database Management"].push({
-      question:`DBMS Question ${i}`,
-      options:["Option A","Option B","Option C","Option D"],
-      answer:"Option D"
-    });
-  }
+let selectedSubject = "";
 
-  function registerStudent(){
-    let name = document.getElementById("studentName").value;
-    let email = document.getElementById("studentEmail").value;
+// Student Registration & Start Quiz
+function startQuiz(){
 
-    if(name === "" || email === ""){
-      alert("Please fill all fields");
-      return;
+    const name = document.getElementById("studentName").value;
+    const email = document.getElementById("studentEmail").value;
+    selectedSubject = document.getElementById("subjectSelect").value;
+
+    if(name === "" || email === "" || selectedSubject === ""){
+        alert("Please fill all details");
+        return;
     }
 
-    students.push({name,email});
+    document.getElementById("registerSection").classList.add("hidden");
+    document.getElementById("adminLoginSection").classList.add("hidden");
 
-    document.getElementById("registerMsg").innerHTML =
-      "Registration Successful";
+    loadQuiz();
+}
 
-    document.getElementById("subjectSection").classList.remove("hidden");
-  }
-
-  function startQuiz(){
-    let subject = document.getElementById("subjectSelect").value;
-
-    if(subject === ""){
-      alert("Please select subject");
-      return;
-    }
+// Load Quiz Questions
+function loadQuiz(){
 
     document.getElementById("quizSection").classList.remove("hidden");
-    document.getElementById("quizTitle").innerText = subject + " Quiz";
 
-    let container = document.getElementById("questionsContainer");
-    container.innerHTML = "";
+    const form = document.getElementById("quizForm");
+    form.innerHTML = "";
 
-    let questions = quizData[subject];
+    document.getElementById("quizTitle").innerText = selectedSubject.toUpperCase() + " Subject Quiz";
 
-    questions.forEach((q,index)=>{
-      let div = document.createElement("div");
-      div.classList.add("question-box");
+    quizData[selectedSubject].forEach((q,index)=>{
 
-      let html = `<p>${index+1}. ${q.question}</p>`;
+        const div = document.createElement("div");
+        div.classList.add("question");
 
-      q.options.forEach(option=>{
-        html += `
-          <div class="option">
-            <input type="radio" name="q${index}" value="${option}"> ${option}
-          </div>
-        `;
-      });
+        let html = `<p>${q.question}</p>`;
 
-      div.innerHTML = html;
-      container.appendChild(div);
+        q.options.forEach(option=>{
+            html += `
+                <div class="option">
+                    <label>
+                        <input type="radio" name="q${index}" value="${option}">
+                        ${option}
+                    </label>
+                </div>
+            `;
+        });
+
+        div.innerHTML = html;
+        form.appendChild(div);
     });
-  }
+}
 
-  function submitQuiz(){
-    let subject = document.getElementById("subjectSelect").value;
-    let questions = quizData[subject];
+// Submit Quiz
+function submitQuiz(){
 
     let score = 0;
 
-    questions.forEach((q,index)=>{
-      let selected = document.querySelector(`input[name="q${index}"]:checked`);
+    quizData[selectedSubject].forEach((q,index)=>{
 
-      if(selected && selected.value === q.answer){
-        score++;
-      }
+        const selected = document.querySelector(`input[name="q${index}"]:checked`);
+
+        if(selected && selected.value === q.answer){
+            score++;
+        }
     });
 
-    document.getElementById("score").innerHTML =
-      `Your Score: ${score} / ${questions.length}`;
-  }
+    document.getElementById("quizSection").classList.add("hidden");
+    document.getElementById("resultSection").classList.remove("hidden");
 
-  function addQuestion(){
-    let subject = document.getElementById("adminSubject").value;
-    let question = document.getElementById("questionText").value;
-    let option1 = document.getElementById("option1").value;
-    let option2 = document.getElementById("option2").value;
-    let option3 = document.getElementById("option3").value;
-    let option4 = document.getElementById("option4").value;
-    let answer = document.getElementById("correctAnswer").value;
+    document.getElementById("scoreBox").innerHTML = `Your Score: ${score} / ${quizData[selectedSubject].length}`;
+}
 
-    if(question === ""){
-      alert("Please enter question");
-      return;
+// Admin Login
+function adminLogin(){
+
+    const user = document.getElementById("adminUser").value;
+    const pass = document.getElementById("adminPass").value;
+
+    if(user === ADMIN_USERNAME && pass === ADMIN_PASSWORD){
+
+        document.getElementById("adminPanel").classList.remove("hidden");
+        alert("Admin Login Successful");
+
+    }else{
+        alert("Invalid Admin Credentials");
+    }
+}
+
+// Logout Admin
+function logoutAdmin(){
+
+    document.getElementById("adminPanel").classList.add("hidden");
+
+    document.getElementById("adminUser").value = "";
+    document.getElementById("adminPass").value = "";
+
+    alert("Admin Logged Out");
+}
+
+// Add Questions by Admin
+function addQuestion(){
+
+    const subject = document.getElementById("adminSubject").value;
+    const question = document.getElementById("questionInput").value;
+    const option1 = document.getElementById("option1").value;
+    const option2 = document.getElementById("option2").value;
+    const option3 = document.getElementById("option3").value;
+    const option4 = document.getElementById("option4").value;
+    const correctAnswer = document.getElementById("correctAnswer").value;
+
+    if(question === "" || option1 === "" || option2 === "" || option3 === "" || option4 === "" || correctAnswer === ""){
+        alert("Fill all question fields");
+        return;
     }
 
-    quizData[subject].push({
-      question:question,
-      options:[option1,option2,option3,option4],
-      answer:answer
-    });
+    const newQuestion = {
+        question:question,
+        options:[option1,option2,option3,option4],
+        answer:correctAnswer
+    };
 
-    document.getElementById("adminMsg").innerHTML =
-      "Question Added Successfully";
+    quizData[subject].push(newQuestion);
 
-    document.getElementById("questionText").value = "";
+    alert("Question Added Successfully");
+
+    document.getElementById("questionInput").value = "";
     document.getElementById("option1").value = "";
     document.getElementById("option2").value = "";
     document.getElementById("option3").value = "";
     document.getElementById("option4").value = "";
     document.getElementById("correctAnswer").value = "";
-  }
+}
 
 </script>
 
