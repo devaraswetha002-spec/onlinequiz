@@ -1,277 +1,329 @@
+# Online Quiz Application for Engineering Students
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Engineering Quiz App</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Engineering Quiz Portal</title>
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial, sans-serif;
+    }
 
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family: Arial, sans-serif;
-}
+    body{
+      background: linear-gradient(135deg,#000000,#001f3f,#003366,#000814);
+      color:white;
+      min-height:100vh;
+    }
 
-body{
-    height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    background: linear-gradient(135deg,#000000,#001f4d,#003366,#000814);
-    overflow:hidden;
-}
+    header{
+      background:rgba(0,0,0,0.8);
+      padding:20px;
+      text-align:center;
+      box-shadow:0 0 15px #00aaff;
+    }
 
-/* Animated Background */
-body::before{
-    content:"";
-    position:absolute;
-    width:600px;
-    height:600px;
-    background:rgba(0,140,255,0.15);
-    border-radius:50%;
-    top:-150px;
-    left:-150px;
-    filter:blur(80px);
-}
+    header h1{
+      color:#00bfff;
+      font-size:36px;
+    }
 
-body::after{
-    content:"";
-    position:absolute;
-    width:500px;
-    height:500px;
-    background:rgba(0,0,0,0.5);
-    border-radius:50%;
-    bottom:-120px;
-    right:-120px;
-    filter:blur(80px);
-}
+    .container{
+      width:90%;
+      max-width:1200px;
+      margin:auto;
+      padding:20px;
+    }
 
-.container{
-    position:relative;
-    width:420px;
-    background:rgba(255,255,255,0.08);
-    border:1px solid rgba(255,255,255,0.15);
-    backdrop-filter:blur(12px);
-    border-radius:20px;
-    padding:30px;
-    color:white;
-    box-shadow:0 0 25px rgba(0,0,0,0.5);
-    z-index:1;
-}
+    .card{
+      background:rgba(255,255,255,0.08);
+      border:1px solid #00bfff;
+      padding:25px;
+      margin-top:20px;
+      border-radius:15px;
+      box-shadow:0 0 20px rgba(0,191,255,0.3);
+    }
 
-.container h1{
-    text-align:center;
-    margin-bottom:20px;
-    color:#4da6ff;
-}
+    h2{
+      color:#00bfff;
+      margin-bottom:15px;
+    }
 
-.subject-select{
-    margin-bottom:20px;
-}
+    input, select, textarea{
+      width:100%;
+      padding:12px;
+      margin:10px 0;
+      border:none;
+      border-radius:8px;
+      background:#0f172a;
+      color:white;
+      border:1px solid #00bfff;
+    }
 
-select{
-    width:100%;
-    padding:12px;
-    border:none;
-    border-radius:10px;
-    background:#001f3f;
-    color:white;
-    font-size:16px;
-}
+    button{
+      background:#00bfff;
+      color:black;
+      padding:12px 20px;
+      border:none;
+      border-radius:8px;
+      cursor:pointer;
+      font-weight:bold;
+      margin-top:10px;
+      transition:0.3s;
+    }
 
-.question{
-    font-size:20px;
-    margin-bottom:20px;
-}
+    button:hover{
+      background:#0099cc;
+      color:white;
+    }
 
-.options button{
-    width:100%;
-    margin:10px 0;
-    padding:12px;
-    border:none;
-    border-radius:10px;
-    background:#004080;
-    color:white;
-    cursor:pointer;
-    transition:0.3s;
-    font-size:16px;
-}
+    .question-box{
+      margin-top:20px;
+      padding:15px;
+      background:#08111f;
+      border-radius:10px;
+      border-left:5px solid #00bfff;
+    }
 
-.options button:hover{
-    background:#0066cc;
-    transform:scale(1.03);
-}
+    .question-box p{
+      font-size:18px;
+      margin-bottom:10px;
+    }
 
-#nextBtn{
-    width:100%;
-    padding:12px;
-    border:none;
-    border-radius:10px;
-    background:#00bfff;
-    color:black;
-    font-weight:bold;
-    margin-top:15px;
-    cursor:pointer;
-    display:none;
-}
+    .option{
+      margin:8px 0;
+    }
 
-#score{
-    text-align:center;
-    font-size:22px;
-    margin-top:20px;
-    color:#66ccff;
-}
-</style>
+    .hidden{
+      display:none;
+    }
+
+    .score{
+      font-size:24px;
+      color:#00ffcc;
+      text-align:center;
+      margin-top:20px;
+    }
+
+    footer{
+      text-align:center;
+      padding:20px;
+      margin-top:40px;
+      background:black;
+      color:#00bfff;
+    }
+  </style>
 </head>
-
 <body>
+
+<header>
+  <h1>Engineering Online Quiz Application</h1>
+  <p>Subject Wise Quiz Portal for Engineering Students</p>
+</header>
 
 <div class="container">
 
-    <h1>Engineering Quiz App</h1>
+  <!-- Student Registration -->
+  <div class="card">
+    <h2>Student Registration</h2>
+    <input type="text" id="studentName" placeholder="Enter Student Name">
+    <input type="email" id="studentEmail" placeholder="Enter Email">
+    <button onclick="registerStudent()">Register</button>
+    <p id="registerMsg"></p>
+  </div>
 
-    <div class="subject-select">
-        <select id="subject" onchange="loadQuiz()">
-            <option value="cse">Computer Science</option>
-            <option value="ece">Electronics</option>
-            <option value="mech">Mechanical</option>
-        </select>
-    </div>
+  <!-- Subject Selection -->
+  <div class="card hidden" id="subjectSection">
+    <h2>Select Subject</h2>
+    <select id="subjectSelect">
+      <option value="">-- Select Subject --</option>
+      <option value="C Programming">C Programming</option>
+      <option value="Java">Java</option>
+      <option value="Python">Python</option>
+      <option value="Database Management">Database Management</option>
+    </select>
+    <button onclick="startQuiz()">Start Quiz</button>
+  </div>
 
-    <div id="quiz">
-        <div class="question" id="question">Question Here</div>
+  <!-- Quiz Section -->
+  <div class="card hidden" id="quizSection">
+    <h2 id="quizTitle"></h2>
+    <div id="questionsContainer"></div>
+    <button onclick="submitQuiz()">Submit Quiz</button>
+    <div class="score" id="score"></div>
+  </div>
 
-        <div class="options" id="options"></div>
+  <!-- Admin Panel -->
+  <div class="card">
+    <h2>Admin Panel - Add Questions</h2>
 
-        <button id="nextBtn" onclick="nextQuestion()">Next Question</button>
+    <select id="adminSubject">
+      <option value="C Programming">C Programming</option>
+      <option value="Java">Java</option>
+      <option value="Python">Python</option>
+      <option value="Database Management">Database Management</option>
+    </select>
 
-        <div id="score"></div>
-    </div>
+    <textarea id="questionText" placeholder="Enter Question"></textarea>
+    <input type="text" id="option1" placeholder="Option 1">
+    <input type="text" id="option2" placeholder="Option 2">
+    <input type="text" id="option3" placeholder="Option 3">
+    <input type="text" id="option4" placeholder="Option 4">
+    <input type="text" id="correctAnswer" placeholder="Correct Answer">
+
+    <button onclick="addQuestion()">Add Question</button>
+    <p id="adminMsg"></p>
+  </div>
 
 </div>
 
+<footer>
+  © 2026 Engineering Quiz Portal | Blue & Black Theme Design
+</footer>
+
 <script>
 
-const quizData = {
-    cse: [
-        {
-            question: "HTML stands for?",
-            options: [
-                "Hyper Text Markup Language",
-                "High Transfer Machine Language",
-                "Hyperlinks Text Management",
-                "Home Tool Markup Language"
-            ],
-            answer: 0
-        },
-        {
-            question: "Which language is used for styling web pages?",
-            options: ["Python","CSS","Java","C++"],
-            answer: 1
-        }
-    ],
+  let students = [];
 
-    ece: [
-        {
-            question: "What is the unit of resistance?",
-            options: ["Volt","Ampere","Ohm","Watt"],
-            answer: 2
-        },
-        {
-            question: "Which device converts AC to DC?",
-            options: ["Rectifier","Amplifier","Transformer","Oscillator"],
-            answer: 0
-        }
-    ],
+  let quizData = {
+    "C Programming": [],
+    "Java": [],
+    "Python": [],
+    "Database Management": []
+  };
 
-    mech: [
-        {
-            question: "SI unit of force?",
-            options: ["Pascal","Newton","Joule","Watt"],
-            answer: 1
-        },
-        {
-            question: "Which engine uses spark plug?",
-            options: ["Diesel Engine","Petrol Engine","Steam Engine","Turbine"],
-            answer: 1
-        }
-    ]
-};
-
-let currentQuestion = 0;
-let score = 0;
-let currentSubject = "cse";
-
-function loadQuiz() {
-
-    currentSubject = document.getElementById("subject").value;
-    currentQuestion = 0;
-    score = 0;
-
-    document.getElementById("score").innerHTML = "";
-
-    showQuestion();
-}
-
-function showQuestion() {
-
-    const questionData = quizData[currentSubject][currentQuestion];
-
-    document.getElementById("question").innerText =
-        questionData.question;
-
-    const optionsDiv = document.getElementById("options");
-    optionsDiv.innerHTML = "";
-
-    questionData.options.forEach((option,index) => {
-
-        const button = document.createElement("button");
-
-        button.innerText = option;
-
-        button.onclick = () => checkAnswer(index);
-
-        optionsDiv.appendChild(button);
+  // Default Questions
+  for(let i=1;i<=10;i++){
+    quizData["C Programming"].push({
+      question:`C Question ${i}`,
+      options:["Option A","Option B","Option C","Option D"],
+      answer:"Option A"
     });
 
-    document.getElementById("nextBtn").style.display = "none";
-}
+    quizData["Java"].push({
+      question:`Java Question ${i}`,
+      options:["Option A","Option B","Option C","Option D"],
+      answer:"Option B"
+    });
 
-function checkAnswer(selected) {
+    quizData["Python"].push({
+      question:`Python Question ${i}`,
+      options:["Option A","Option B","Option C","Option D"],
+      answer:"Option C"
+    });
 
-    const correct =
-        quizData[currentSubject][currentQuestion].answer;
+    quizData["Database Management"].push({
+      question:`DBMS Question ${i}`,
+      options:["Option A","Option B","Option C","Option D"],
+      answer:"Option D"
+    });
+  }
 
-    if(selected === correct){
-        score++;
-        alert("Correct Answer!");
+  function registerStudent(){
+    let name = document.getElementById("studentName").value;
+    let email = document.getElementById("studentEmail").value;
+
+    if(name === "" || email === ""){
+      alert("Please fill all fields");
+      return;
     }
-    else{
-        alert("Wrong Answer!");
+
+    students.push({name,email});
+
+    document.getElementById("registerMsg").innerHTML =
+      "Registration Successful";
+
+    document.getElementById("subjectSection").classList.remove("hidden");
+  }
+
+  function startQuiz(){
+    let subject = document.getElementById("subjectSelect").value;
+
+    if(subject === ""){
+      alert("Please select subject");
+      return;
     }
 
-    document.getElementById("nextBtn").style.display = "block";
-}
+    document.getElementById("quizSection").classList.remove("hidden");
+    document.getElementById("quizTitle").innerText = subject + " Quiz";
 
-function nextQuestion() {
+    let container = document.getElementById("questionsContainer");
+    container.innerHTML = "";
 
-    currentQuestion++;
+    let questions = quizData[subject];
 
-    if(currentQuestion < quizData[currentSubject].length){
+    questions.forEach((q,index)=>{
+      let div = document.createElement("div");
+      div.classList.add("question-box");
 
-        showQuestion();
+      let html = `<p>${index+1}. ${q.question}</p>`;
 
-    } else {
-
-        document.getElementById("quiz").innerHTML = `
-            <h2 style="text-align:center;">Quiz Completed!</h2>
-            <div id="score">Your Score: ${score}</div>
+      q.options.forEach(option=>{
+        html += `
+          <div class="option">
+            <input type="radio" name="q${index}" value="${option}"> ${option}
+          </div>
         `;
-    }
-}
+      });
 
-loadQuiz();
+      div.innerHTML = html;
+      container.appendChild(div);
+    });
+  }
+
+  function submitQuiz(){
+    let subject = document.getElementById("subjectSelect").value;
+    let questions = quizData[subject];
+
+    let score = 0;
+
+    questions.forEach((q,index)=>{
+      let selected = document.querySelector(`input[name="q${index}"]:checked`);
+
+      if(selected && selected.value === q.answer){
+        score++;
+      }
+    });
+
+    document.getElementById("score").innerHTML =
+      `Your Score: ${score} / ${questions.length}`;
+  }
+
+  function addQuestion(){
+    let subject = document.getElementById("adminSubject").value;
+    let question = document.getElementById("questionText").value;
+    let option1 = document.getElementById("option1").value;
+    let option2 = document.getElementById("option2").value;
+    let option3 = document.getElementById("option3").value;
+    let option4 = document.getElementById("option4").value;
+    let answer = document.getElementById("correctAnswer").value;
+
+    if(question === ""){
+      alert("Please enter question");
+      return;
+    }
+
+    quizData[subject].push({
+      question:question,
+      options:[option1,option2,option3,option4],
+      answer:answer
+    });
+
+    document.getElementById("adminMsg").innerHTML =
+      "Question Added Successfully";
+
+    document.getElementById("questionText").value = "";
+    document.getElementById("option1").value = "";
+    document.getElementById("option2").value = "";
+    document.getElementById("option3").value = "";
+    document.getElementById("option4").value = "";
+    document.getElementById("correctAnswer").value = "";
+  }
 
 </script>
 
