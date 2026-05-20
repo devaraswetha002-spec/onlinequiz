@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Engineering Quiz App</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: Arial, sans-serif;
+}
+
+body{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background: linear-gradient(135deg,#000000,#001f4d,#003366,#000814);
+    overflow:hidden;
+}
+
+/* Animated Background */
+body::before{
+    content:"";
+    position:absolute;
+    width:600px;
+    height:600px;
+    background:rgba(0,140,255,0.15);
+    border-radius:50%;
+    top:-150px;
+    left:-150px;
+    filter:blur(80px);
+}
+
+body::after{
+    content:"";
+    position:absolute;
+    width:500px;
+    height:500px;
+    background:rgba(0,0,0,0.5);
+    border-radius:50%;
+    bottom:-120px;
+    right:-120px;
+    filter:blur(80px);
+}
+
+.container{
+    position:relative;
+    width:420px;
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.15);
+    backdrop-filter:blur(12px);
+    border-radius:20px;
+    padding:30px;
+    color:white;
+    box-shadow:0 0 25px rgba(0,0,0,0.5);
+    z-index:1;
+}
+
+.container h1{
+    text-align:center;
+    margin-bottom:20px;
+    color:#4da6ff;
+}
+
+.subject-select{
+    margin-bottom:20px;
+}
+
+select{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    background:#001f3f;
+    color:white;
+    font-size:16px;
+}
+
+.question{
+    font-size:20px;
+    margin-bottom:20px;
+}
+
+.options button{
+    width:100%;
+    margin:10px 0;
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    background:#004080;
+    color:white;
+    cursor:pointer;
+    transition:0.3s;
+    font-size:16px;
+}
+
+.options button:hover{
+    background:#0066cc;
+    transform:scale(1.03);
+}
+
+#nextBtn{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    background:#00bfff;
+    color:black;
+    font-weight:bold;
+    margin-top:15px;
+    cursor:pointer;
+    display:none;
+}
+
+#score{
+    text-align:center;
+    font-size:22px;
+    margin-top:20px;
+    color:#66ccff;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Engineering Quiz App</h1>
+
+    <div class="subject-select">
+        <select id="subject" onchange="loadQuiz()">
+            <option value="cse">Computer Science</option>
+            <option value="ece">Electronics</option>
+            <option value="mech">Mechanical</option>
+        </select>
+    </div>
+
+    <div id="quiz">
+        <div class="question" id="question">Question Here</div>
+
+        <div class="options" id="options"></div>
+
+        <button id="nextBtn" onclick="nextQuestion()">Next Question</button>
+
+        <div id="score"></div>
+    </div>
+
+</div>
+
+<script>
+
+const quizData = {
+    cse: [
+        {
+            question: "HTML stands for?",
+            options: [
+                "Hyper Text Markup Language",
+                "High Transfer Machine Language",
+                "Hyperlinks Text Management",
+                "Home Tool Markup Language"
+            ],
+            answer: 0
+        },
+        {
+            question: "Which language is used for styling web pages?",
+            options: ["Python","CSS","Java","C++"],
+            answer: 1
+        }
+    ],
+
+    ece: [
+        {
+            question: "What is the unit of resistance?",
+            options: ["Volt","Ampere","Ohm","Watt"],
+            answer: 2
+        },
+        {
+            question: "Which device converts AC to DC?",
+            options: ["Rectifier","Amplifier","Transformer","Oscillator"],
+            answer: 0
+        }
+    ],
+
+    mech: [
+        {
+            question: "SI unit of force?",
+            options: ["Pascal","Newton","Joule","Watt"],
+            answer: 1
+        },
+        {
+            question: "Which engine uses spark plug?",
+            options: ["Diesel Engine","Petrol Engine","Steam Engine","Turbine"],
+            answer: 1
+        }
+    ]
+};
+
+let currentQuestion = 0;
+let score = 0;
+let currentSubject = "cse";
+
+function loadQuiz() {
+
+    currentSubject = document.getElementById("subject").value;
+    currentQuestion = 0;
+    score = 0;
+
+    document.getElementById("score").innerHTML = "";
+
+    showQuestion();
+}
+
+function showQuestion() {
+
+    const questionData = quizData[currentSubject][currentQuestion];
+
+    document.getElementById("question").innerText =
+        questionData.question;
+
+    const optionsDiv = document.getElementById("options");
+    optionsDiv.innerHTML = "";
+
+    questionData.options.forEach((option,index) => {
+
+        const button = document.createElement("button");
+
+        button.innerText = option;
+
+        button.onclick = () => checkAnswer(index);
+
+        optionsDiv.appendChild(button);
+    });
+
+    document.getElementById("nextBtn").style.display = "none";
+}
+
+function checkAnswer(selected) {
+
+    const correct =
+        quizData[currentSubject][currentQuestion].answer;
+
+    if(selected === correct){
+        score++;
+        alert("Correct Answer!");
+    }
+    else{
+        alert("Wrong Answer!");
+    }
+
+    document.getElementById("nextBtn").style.display = "block";
+}
+
+function nextQuestion() {
+
+    currentQuestion++;
+
+    if(currentQuestion < quizData[currentSubject].length){
+
+        showQuestion();
+
+    } else {
+
+        document.getElementById("quiz").innerHTML = `
+            <h2 style="text-align:center;">Quiz Completed!</h2>
+            <div id="score">Your Score: ${score}</div>
+        `;
+    }
+}
+
+loadQuiz();
+
+</script>
+
+</body>
+</html>
