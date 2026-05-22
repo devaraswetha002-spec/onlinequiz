@@ -1,4 +1,538 @@
+# AI Powered Online Quiz Application for Engineering Students
+
+## index.html
+
+```html
 <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Engineering Quiz Portal</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    background:#020617;
+    overflow-x:hidden;
+    color:white;
+    min-height:100vh;
+}
+
+/* AI Cloud Background */
+body::before{
+    content:"";
+    position:fixed;
+    width:100%;
+    height:100%;
+    background:
+    radial-gradient(circle at top left,#00aeff55,transparent 30%),
+    radial-gradient(circle at bottom right,#0044ff55,transparent 30%),
+    radial-gradient(circle at center,#00ffff22,transparent 40%);
+    animation: moveBg 10s infinite alternate;
+    z-index:-2;
+}
+
+@keyframes moveBg{
+    from{
+        transform:scale(1) translateY(0px);
+    }
+    to{
+        transform:scale(1.1) translateY(-20px);
+    }
+}
+
+.container{
+    width:95%;
+    max-width:1200px;
+    margin:auto;
+    padding:20px;
+}
+
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:20px;
+    background:rgba(255,255,255,0.08);
+    border-radius:20px;
+    backdrop-filter:blur(12px);
+    box-shadow:0 0 20px rgba(0,174,255,0.2);
+}
+
+.logo{
+    font-size:28px;
+    font-weight:bold;
+    color:#00d9ff;
+}
+
+.nav button{
+    padding:10px 20px;
+    border:none;
+    border-radius:12px;
+    background:#00aeff;
+    color:white;
+    cursor:pointer;
+    margin-left:10px;
+    transition:0.3s;
+}
+
+.nav button:hover{
+    background:#0044ff;
+    transform:scale(1.05);
+}
+
+.card{
+    margin-top:30px;
+    padding:30px;
+    background:rgba(255,255,255,0.08);
+    border-radius:25px;
+    backdrop-filter:blur(15px);
+    box-shadow:0 0 25px rgba(0,174,255,0.15);
+}
+
+h1,h2,h3{
+    margin-bottom:20px;
+    text-align:center;
+}
+
+input,select{
+    width:100%;
+    padding:14px;
+    margin-top:12px;
+    border:none;
+    border-radius:12px;
+    background:#dff6ff;
+    color:black;
+    font-size:15px;
+}
+
+button{
+    width:100%;
+    padding:14px;
+    margin-top:20px;
+    border:none;
+    border-radius:14px;
+    background:linear-gradient(45deg,#00aeff,#0044ff);
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+button:hover{
+    transform:translateY(-2px);
+    box-shadow:0 0 20px #00aeff;
+}
+
+.hidden{
+    display:none;
+}
+
+.quiz-box{
+    margin-top:20px;
+}
+
+.question{
+    font-size:20px;
+    margin-bottom:20px;
+}
+
+.option{
+    background:rgba(255,255,255,0.1);
+    padding:15px;
+    margin:10px 0;
+    border-radius:15px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.option:hover{
+    background:#00aeff55;
+}
+
+.progress{
+    width:100%;
+    height:12px;
+    background:#1e293b;
+    border-radius:20px;
+    overflow:hidden;
+    margin-top:20px;
+}
+
+.progress-bar{
+    width:0%;
+    height:100%;
+    background:linear-gradient(to right,#00ffff,#0044ff);
+}
+
+.timer{
+    font-size:22px;
+    text-align:right;
+    color:#00ffff;
+    margin-bottom:20px;
+}
+
+.dashboard-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+}
+
+.dashboard-card{
+    padding:25px;
+    border-radius:20px;
+    background:rgba(255,255,255,0.08);
+    backdrop-filter:blur(10px);
+    text-align:center;
+}
+
+.dashboard-card i{
+    font-size:40px;
+    margin-bottom:15px;
+    color:#00d9ff;
+}
+
+.score-box{
+    text-align:center;
+    font-size:30px;
+    color:#00ffff;
+    margin-top:20px;
+}
+
+@media(max-width:768px){
+
+    .header{
+        flex-direction:column;
+        gap:15px;
+    }
+
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <div class="logo">AI Quiz Portal</div>
+
+        <div class="nav">
+            <button onclick="showStudent()">Student</button>
+            <button onclick="showAdmin()">Admin</button>
+        </div>
+    </div>
+
+    <!-- Student Registration -->
+    <div class="card" id="studentSection">
+
+        <h1>Engineering Student Registration</h1>
+
+        <input type="text" id="name" placeholder="Enter Name">
+        <input type="email" id="email" placeholder="Enter Email">
+        <input type="text" id="roll" placeholder="Enter Roll Number">
+        <input type="password" id="password" placeholder="Enter Password">
+
+        <select id="subject">
+            <option value="">Select Subject</option>
+            <option value="C Programming">C Programming</option>
+            <option value="Java">Java</option>
+            <option value="Python">Python</option>
+            <option value="DBMS">DBMS</option>
+            <option value="Operating Systems">Operating Systems</option>
+            <option value="Computer Networks">Computer Networks</option>
+        </select>
+
+        <button onclick="startQuiz()">Register & Start Quiz</button>
+
+    </div>
+
+    <!-- Admin Login -->
+    <div class="card hidden" id="adminLogin">
+
+        <h1>Admin Login</h1>
+
+        <input type="text" id="adminUser" placeholder="Admin Username">
+        <input type="password" id="adminPass" placeholder="Admin Password">
+
+        <button onclick="adminLogin()">Login</button>
+
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div class="card hidden" id="adminDashboard">
+
+        <h1>Admin Dashboard</h1>
+
+        <div class="dashboard-grid">
+
+            <div class="dashboard-card">
+                <i class="fa-solid fa-circle-question"></i>
+                <h3>Add Questions</h3>
+            </div>
+
+            <div class="dashboard-card">
+                <i class="fa-solid fa-pen"></i>
+                <h3>Edit Questions</h3>
+            </div>
+
+            <div class="dashboard-card">
+                <i class="fa-solid fa-trash"></i>
+                <h3>Delete Questions</h3>
+            </div>
+
+            <div class="dashboard-card">
+                <i class="fa-solid fa-chart-line"></i>
+                <h3>Performance Analytics</h3>
+            </div>
+
+        </div>
+
+        <h2 style="margin-top:30px;">Add Quiz Question</h2>
+
+        <select id="adminSubject">
+            <option>C Programming</option>
+            <option>Java</option>
+            <option>Python</option>
+            <option>DBMS</option>
+        </select>
+
+        <input type="text" id="question" placeholder="Enter Question">
+        <input type="text" id="op1" placeholder="Option 1">
+        <input type="text" id="op2" placeholder="Option 2">
+        <input type="text" id="op3" placeholder="Option 3">
+        <input type="text" id="op4" placeholder="Option 4">
+        <input type="text" id="answer" placeholder="Correct Answer">
+
+        <button onclick="addQuestion()">Add Question</button>
+
+    </div>
+
+    <!-- Quiz Section -->
+    <div class="card hidden" id="quizSection">
+
+        <div class="timer">Time Left: <span id="timer">30</span>s</div>
+
+        <div class="progress">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <div class="quiz-box">
+            <div class="question" id="questionText"></div>
+            <div id="options"></div>
+        </div>
+
+        <button onclick="nextQuestion()">Next Question</button>
+
+    </div>
+
+    <!-- Result Section -->
+    <div class="card hidden" id="resultSection">
+
+        <h1>Quiz Result</h1>
+
+        <div class="score-box" id="scoreBox"></div>
+
+    </div>
+
+</div>
+
+<script>
+
+// Admin Credentials
+const adminUsername = "admin";
+const adminPassword = "admin123";
+
+// ML-Based Adaptive Questions
+let questions = [
+
+{
+subject:"Java",
+question:"Who developed Java?",
+options:["James Gosling","Dennis Ritchie","Guido","Elon Musk"],
+answer:"James Gosling",
+difficulty:"easy"
+},
+
+{
+subject:"Java",
+question:"Which keyword is used for inheritance?",
+options:["extends","implements","inherit","using"],
+answer:"extends",
+difficulty:"medium"
+},
+
+{
+subject:"DBMS",
+question:"SQL stands for?",
+options:["Structured Query Language","Simple Query","None","Sequential Query"],
+answer:"Structured Query Language",
+difficulty:"easy"
+},
+
+{
+subject:"Python",
+question:"Python is developed by?",
+options:["Guido van Rossum","James Gosling","Dennis Ritchie","Mark"],
+answer:"Guido van Rossum",
+difficulty:"easy"
+},
+
+{
+subject:"C Programming",
+question:"Who developed C language?",
+options:["Dennis Ritchie","James Gosling","Guido","Bjarne"],
+answer:"Dennis Ritchie",
+difficulty:"easy"
+}
+
+];
+
+let currentQuestion = 0;
+let score = 0;
+let timer;
+let timeLeft = 30;
+let selectedQuestions = [];
+
+function showStudent(){
+
+    document.getElementById("studentSection").classList.remove("hidden");
+    document.getElementById("adminLogin").classList.add("hidden");
+
+}
+
+function showAdmin(){
+
+    document.getElementById("adminLogin").classList.remove("hidden");
+    document.getElementById("studentSection").classList.add("hidden");
+
+}
+
+function adminLogin(){
+
+    const user = document.getElementById("adminUser").value;
+    const pass = document.getElementById("adminPass").value;
+
+    if(user === adminUsername && pass === adminPassword){
+
+        document.getElementById("adminDashboard").classList.remove("hidden");
+        document.getElementById("adminLogin").classList.add("hidden");
+
+    }else{
+
+        alert("Invalid Credentials");
+
+    }
+}
+
+function addQuestion(){
+
+    const subject = document.getElementById("adminSubject").value;
+
+    const newQuestion = {
+
+        subject:subject,
+        question:document.getElementById("question").value,
+        options:[
+            document.getElementById("op1").value,
+            document.getElementById("op2").value,
+            document.getElementById("op3").value,
+            document.getElementById("op4").value
+        ],
+        answer:document.getElementById("answer").value,
+        difficulty:"medium"
+
+    };
+
+    questions.push(newQuestion);
+
+    alert("Question Added Successfully");
+
+}
+
+function startQuiz(){
+
+    const subject = document.getElementById("subject").value;
+
+    if(subject === ""){
+        alert("Select Subject");
+        return;
+    }
+
+    // ML Algorithm Random Question Selection
+    selectedQuestions = questions
+    .filter(q => q.subject === subject)
+    .sort(() => 0.5 - Math.random())
+    .slice(0,20);
+
+    currentQuestion = 0;
+    score = 0;
+
+    document.getElementById("studentSection").classList.add("hidden");
+    document.getElementById("quizSection").classList.remove("hidden");
+
+    loadQuestion();
+
+}
+
+function loadQuestion(){
+
+    resetTimer();
+
+    const q = selectedQuestions[currentQuestion];
+
+    document.getElementById("questionText").innerText = q.question;
+
+    const optionsDiv = document.getElementById("options");
+    optionsDiv.innerHTML = "";
+
+    q.options.forEach(option => {
+
+        const div = document.createElement("div");
+        div.classList.add("option");
+        div.innerText = option;
+
+        div.onclick = () => {
+
+            if(option === q.answer){
+                score++;
+            }
+
+            nextQuestion();
+
+        };
+
+        optionsDiv.appendChild(div);
+
+    });
+
+    updateProgress();
+
+}
+
+function nextQuestion(){
+
+    currentQuestion++;
+
+    if(currentQuestion < selectedQuestions.length){
+
+        loadQuestion();
+
+    }else{
+
+        showResult();
+
+    }
 
 }
 
@@ -49,3 +583,4 @@ function resetTimer(){
 
 </body>
 </html>
+```
