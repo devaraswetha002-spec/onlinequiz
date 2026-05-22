@@ -1,550 +1,321 @@
-# Online Quiz Application for Engineering Students
-
-## index.html
-
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Engineering Quiz Portal</title>
-    <style>
-        *{
-            margin:0;
-            padding:0;
-            box-sizing:border-box;
-            font-family: Arial, sans-serif;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Quiz Application</title>
 
-        body{
-            background:
-            radial-gradient(circle at top left, rgba(0,153,255,0.35), transparent 30%),
-            radial-gradient(circle at bottom right, rgba(0,102,204,0.30), transparent 30%),
-            linear-gradient(135deg,#000000,#020b1f,#001f4d,#000814,#000000);
-            background-size: cover;
-            color:white;
-            min-height:100vh;
-            overflow-x:hidden;
-            position:relative;
-        }
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
-        body::before{
-            content:"";
-            position:fixed;
-            width:100%;
-            height:100%;
-            top:0;
-            left:0;
-            background:url('https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1974&auto=format&fit=crop') center/cover;
-            opacity:0.12;
-            z-index:-2;
-        }
+<style>
 
-        body::after{
-            content:"";
-            position:fixed;
-            top:0;
-            left:0;
-            width:100%;
-            height:100%;
-            background:linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,51,102,0.5));
-            z-index:-1;
-        }
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
 
-        .container{
-            width:90%;
-            max-width:1000px;
-            margin:auto;
-            padding:20px;
-        }
+body{
+    background:linear-gradient(135deg,#000428,#004e92);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+    color:white;
+}
 
-        h1,h2,h3{
-            text-align:center;
-            margin-bottom:20px;
-        }
+.background{
+    position:absolute;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    z-index:-1;
+}
 
-        .card{
-            background: rgba(255,255,255,0.08);
-            padding:25px;
-            border-radius:15px;
-            margin-top:20px;
-            box-shadow:0 0 15px rgba(0,0,0,0.5);
-            backdrop-filter: blur(10px);
-        }
+.circle{
+    position:absolute;
+    border-radius:50%;
+    background:rgba(0,183,255,0.2);
+    animation:float 10s infinite linear;
+}
 
-        input,select,button{
-            width:100%;
-            padding:12px;
-            margin-top:10px;
-            border:none;
-            border-radius:8px;
-        }
+.circle:nth-child(1){
+    width:250px;
+    height:250px;
+    top:10%;
+    left:5%;
+}
 
-        input,select{
-            background:#e6f0ff;
-        }
+.circle:nth-child(2){
+    width:180px;
+    height:180px;
+    bottom:10%;
+    right:10%;
+}
 
-        button{
-            background:#0066ff;
-            color:white;
-            font-size:16px;
-            cursor:pointer;
-            transition:0.3s;
-        }
+.circle:nth-child(3){
+    width:120px;
+    height:120px;
+    top:60%;
+    left:40%;
+}
 
-        button:hover{
-            background:#0047b3;
-        }
+@keyframes float{
+    0%{
+        transform:translateY(0px);
+    }
+    50%{
+        transform:translateY(-30px);
+    }
+    100%{
+        transform:translateY(0px);
+    }
+}
 
-        .hidden{
-            display:none;
-        }
+.container{
+    width:90%;
+    max-width:500px;
+    background:rgba(255,255,255,0.08);
+    backdrop-filter:blur(10px);
+    padding:30px;
+    border-radius:20px;
+    box-shadow:0 0 30px rgba(0,0,0,0.5);
+}
 
-        .question{
-            margin-bottom:20px;
-            padding:15px;
-            background:rgba(0,0,0,0.3);
-            border-radius:10px;
-        }
+h1{
+    text-align:center;
+    margin-bottom:20px;
+    color:#00d9ff;
+}
 
-        .question p{
-            margin-bottom:10px;
-            font-weight:bold;
-        }
+.question{
+    font-size:20px;
+    margin-bottom:20px;
+}
 
-        .option{
-            margin:8px 0;
-        }
+.option{
+    background:#111;
+    padding:12px;
+    margin:10px 0;
+    border-radius:10px;
+    cursor:pointer;
+    transition:0.3s;
+    border:1px solid transparent;
+}
 
-        .score-box{
-            text-align:center;
-            font-size:28px;
-            color:#00ffcc;
-        }
+.option:hover{
+    background:#00b7ff;
+    transform:scale(1.03);
+}
 
-        .header{
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            margin-bottom:20px;
-        }
+button{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:10px;
+    background:#00b7ff;
+    color:white;
+    font-size:18px;
+    cursor:pointer;
+    margin-top:20px;
+    transition:0.3s;
+}
 
-        .logout-btn{
-            width:auto;
-            padding:10px 20px;
-        }
+button:hover{
+    background:#0095d9;
+}
 
-        .admin-note{
-            color:#66ccff;
-            text-align:center;
-            margin-top:10px;
-        }
-    </style>
+.result{
+    text-align:center;
+    margin-top:20px;
+    font-size:22px;
+    color:#00ffae;
+}
+
+.level{
+    text-align:center;
+    margin-bottom:15px;
+    color:#ffd700;
+    font-weight:bold;
+}
+
+</style>
 </head>
+
 <body>
+
+<div class="background">
+    <div class="circle"></div>
+    <div class="circle"></div>
+    <div class="circle"></div>
+</div>
 
 <div class="container">
 
-    <h1>Engineering Online Quiz Application</h1>
+    <h1>AI Quiz Application</h1>
 
-    <!-- Registration Section -->
-    <div class="card" id="registerSection">
-        <h2>Student Registration</h2>
-
-        <input type="text" id="studentName" placeholder="Enter Student Name">
-        <input type="email" id="studentEmail" placeholder="Enter Email">
-
-        <select id="subjectSelect">
-            <option value="">Select Subject</option>
-            <option value="c">C Programming</option>
-            <option value="java">Java</option>
-            <option value="dbms">DBMS</option>
-        </select>
-
-        <button onclick="startQuiz()">Register & Start Quiz</button>
+    <div class="level" id="level">
+        Difficulty Level : Easy
     </div>
 
-    <!-- Admin Login -->
-    <div class="card" id="adminLoginSection">
-        <h2>Admin Login</h2>
-
-        <input type="text" id="adminUser" placeholder="Admin Username">
-        <input type="password" id="adminPass" placeholder="Admin Password">
-
-        <button onclick="adminLogin()">Login as Admin</button>
-
-        <p class="admin-note">Admin can add questions. Students cannot access admin panel.</p>
+    <div class="question" id="question">
+        Question appears here
     </div>
 
-    <!-- Admin Panel -->
-    <div class="card hidden" id="adminPanel">
+    <div id="options"></div>
 
-        <div class="header">
-            <h2>Admin Panel</h2>
-            <button class="logout-btn" onclick="logoutAdmin()">Logout</button>
-        </div>
+    <button onclick="nextQuestion()">Next Question</button>
 
-        <select id="adminSubject">
-            <option value="c">C Programming</option>
-            <option value="java">Java</option>
-            <option value="dbms">DBMS</option>
-        </select>
-
-        <input type="text" id="questionInput" placeholder="Enter Question">
-        <input type="text" id="option1" placeholder="Option 1">
-        <input type="text" id="option2" placeholder="Option 2">
-        <input type="text" id="option3" placeholder="Option 3">
-        <input type="text" id="option4" placeholder="Option 4">
-        <input type="text" id="correctAnswer" placeholder="Correct Answer">
-
-        <button onclick="addQuestion()">Add Question</button>
-
-    </div>
-
-    <!-- Quiz Section -->
-    <div class="card hidden" id="quizSection">
-        <h2 id="quizTitle"></h2>
-
-        <form id="quizForm"></form>
-
-        <button onclick="submitQuiz()">Submit Quiz</button>
-    </div>
-
-    <!-- Result Section -->
-    <div class="card hidden" id="resultSection">
-        <h2>Quiz Result</h2>
-        <div class="score-box" id="scoreBox"></div>
-    </div>
+    <div class="result" id="result"></div>
 
 </div>
 
 <script>
 
-// Admin Credentials
-const ADMIN_USERNAME = "admin";
-const ADMIN_PASSWORD = "admin123";
+const quizData = [
 
-// Quiz Questions with Daily Admin Update Support
-let quizData = JSON.parse(localStorage.getItem("quizData")) || {
-
-    c:[
-        {
-            question:"1. Who developed C language?",
-            options:["Dennis Ritchie","James Gosling","Guido Van Rossum","Bjarne Stroustrup"],
-            answer:"Dennis Ritchie"
-        },
-        {
-            question:"2. Which symbol is used for comments in C?",
-            options:["//","<!-- -->","##","**"],
-            answer:"//"
-        },
-        {
-            question:"3. Which header file is used for printf()?",
-            options:["stdio.h","math.h","string.h","conio.h"],
-            answer:"stdio.h"
-        },
-        {
-            question:"4. Which loop executes at least once?",
-            options:["for","while","do while","none"],
-            answer:"do while"
-        },
-        {
-            question:"5. Which keyword is used to stop loop?",
-            options:["exit","stop","break","return"],
-            answer:"break"
-        }
+{
+    question:"What does HTML stand for?",
+    options:[
+        "Hyper Text Markup Language",
+        "High Text Machine Language",
+        "Hyperlinks Text Mark",
+        "Home Tool Markup"
     ],
+    answer:"Hyper Text Markup Language",
+    difficulty:"Easy"
+},
 
-    java:[
-        {
-            question:"1. Java was developed by?",
-            options:["James Gosling","Dennis Ritchie","Bill Gates","Elon Musk"],
-            answer:"James Gosling"
-        },
-        {
-            question:"2. Java is a ____ language.",
-            options:["Compiled","Interpreted","Both","None"],
-            answer:"Both"
-        },
-        {
-            question:"3. Which keyword is used for inheritance?",
-            options:["implement","extends","inherit","using"],
-            answer:"extends"
-        },
-        {
-            question:"4. JVM stands for?",
-            options:["Java Variable Machine","Java Virtual Machine","Joint Virtual Machine","None"],
-            answer:"Java Virtual Machine"
-        },
-        {
-            question:"5. Which method starts Java program?",
-            options:["run()","main()","start()","init()"],
-            answer:"main()"
-        }
+{
+    question:"Which language is used for Machine Learning?",
+    options:[
+        "Python",
+        "HTML",
+        "CSS",
+        "PHP"
     ],
+    answer:"Python",
+    difficulty:"Medium"
+},
 
-    dbms:[
-        {
-            question:"1. DBMS stands for?",
-            options:["Database Management System","Data Backup Management System","Database Method System","None"],
-            answer:"Database Management System"
-        },
-        {
-            question:"2. Which language is used in DBMS?",
-            options:["SQL","HTML","CSS","Python"],
-            answer:"SQL"
-        },
-        {
-            question:"3. Primary key cannot contain?",
-            options:["Numbers","Duplicates","Unique Values","Characters"],
-            answer:"Duplicates"
-        },
-        {
-            question:"4. SQL stands for?",
-            options:["Structured Query Language","Simple Query Language","Sequential Query Language","None"],
-            answer:"Structured Query Language"
-        },
-        {
-            question:"5. Which command is used to retrieve data?",
-            options:["GET","SELECT","OPEN","SHOW"],
-            answer:"SELECT"
-        }
-    ]
-};
-
-let selectedSubject = "";
-
-// Student Registration & Start Quiz
-function startQuiz(){
-
-    const name = document.getElementById("studentName").value;
-    const email = document.getElementById("studentEmail").value;
-    selectedSubject = document.getElementById("subjectSelect").value;
-
-    if(name === "" || email === "" || selectedSubject === ""){
-        alert("Please fill all details");
-        return;
-    }
-
-    document.getElementById("registerSection").classList.add("hidden");
-    document.getElementById("adminLoginSection").classList.add("hidden");
-
-    loadQuiz();
+{
+    question:"Which algorithm is used for prediction?",
+    options:[
+        "Linear Regression",
+        "HTML",
+        "Bootstrap",
+        "DNS"
+    ],
+    answer:"Linear Regression",
+    difficulty:"Hard"
 }
 
-// Load Quiz Questions
-function loadQuiz(){
+];
 
-    document.getElementById("quizSection").classList.remove("hidden");
+let currentQuestion = 0;
+let score = 0;
 
-    const form = document.getElementById("quizForm");
-    form.innerHTML = "";
+function loadQuestion(){
 
-    document.getElementById("quizTitle").innerText = selectedSubject.toUpperCase() + " Subject Quiz";
+    const questionData = quizData[currentQuestion];
 
-    quizData[selectedSubject].forEach((q,index)=>{
+    document.getElementById("question").innerText =
+        questionData.question;
+
+    document.getElementById("level").innerText =
+        "Difficulty Level : " + questionData.difficulty;
+
+    const optionsContainer =
+        document.getElementById("options");
+
+    optionsContainer.innerHTML = "";
+
+    questionData.options.forEach(option => {
 
         const div = document.createElement("div");
-        div.classList.add("question");
 
-        let html = `<p>${q.question}</p>`;
+        div.classList.add("option");
 
-        q.options.forEach(option=>{
-            html += `
-                <div class="option">
-                    <label>
-                        <input type="radio" name="q${index}" value="${option}">
-                        ${option}
-                    </label>
-                </div>
-            `;
-        });
+        div.innerText = option;
 
-        div.innerHTML = html;
-        form.appendChild(div);
-    });
-}
+        div.onclick = () => selectAnswer(option);
 
-// Submit Quiz
-function submitQuiz(){
+        optionsContainer.appendChild(div);
 
-    let score = 0;
-
-    quizData[selectedSubject].forEach((q,index)=>{
-
-        const selected = document.querySelector(`input[name="q${index}"]:checked`);
-
-        if(selected && selected.value === q.answer){
-            score++;
-        }
     });
 
-    document.getElementById("quizSection").classList.add("hidden");
-    document.getElementById("resultSection").classList.remove("hidden");
-
-    document.getElementById("scoreBox").innerHTML = `Your Score: ${score} / ${quizData[selectedSubject].length}`;
 }
 
-// Admin Login
-function adminLogin(){
+function selectAnswer(selected){
 
-    const user = document.getElementById("adminUser").value;
-    const pass = document.getElementById("adminPass").value;
+    const correct =
+        quizData[currentQuestion].answer;
 
-    if(user === ADMIN_USERNAME && pass === ADMIN_PASSWORD){
+    if(selected === correct){
 
-        document.getElementById("adminPanel").classList.remove("hidden");
-        alert("Admin Login Successful");
+        score++;
+
+        alert("Correct Answer ✅");
 
     }else{
-        alert("Invalid Admin Credentials");
-    }
-}
 
-// Logout Admin
-function logoutAdmin(){
+        alert("Wrong Answer ❌");
 
-    document.getElementById("adminPanel").classList.add("hidden");
-
-    document.getElementById("adminUser").value = "";
-    document.getElementById("adminPass").value = "";
-
-    alert("Admin Logged Out");
-}
-
-// Add Questions by Admin
-function addQuestion(){
-
-    const subject = document.getElementById("adminSubject").value;
-    const question = document.getElementById("questionInput").value;
-    const option1 = document.getElementById("option1").value;
-    const option2 = document.getElementById("option2").value;
-    const option3 = document.getElementById("option3").value;
-    const option4 = document.getElementById("option4").value;
-    const correctAnswer = document.getElementById("correctAnswer").value;
-
-    if(question === "" || option1 === "" || option2 === "" || option3 === "" || option4 === "" || correctAnswer === ""){
-        alert("Fill all question fields");
-        return;
     }
 
-    const newQuestion = {
-        question:question,
-        options:[option1,option2,option3,option4],
-        answer:correctAnswer
-    };
-
-    quizData[subject].push(newQuestion);
-
-    // Save Questions Permanently
-    localStorage.setItem("quizData", JSON.stringify(quizData));
-
-    alert("Question Added Successfully and Saved");
-
-    document.getElementById("questionInput").value = "";
-    document.getElementById("option1").value = "";
-    document.getElementById("option2").value = "";
-    document.getElementById("option3").value = "";
-    document.getElementById("option4").value = "";
-    document.getElementById("correctAnswer").value = "";
 }
 
-// Delete Question
-function deleteQuestion(subject,index){
+function nextQuestion(){
 
-    quizData[subject].splice(index,1);
+    currentQuestion++;
 
-    localStorage.setItem("quizData", JSON.stringify(quizData));
+    if(currentQuestion < quizData.length){
 
-    alert("Question Deleted Successfully");
+        loadQuestion();
+
+    }else{
+
+        document.querySelector(".container").innerHTML =
+        `
+        <h1>Quiz Completed</h1>
+        <div class="result">
+            Your Score : ${score}/${quizData.length}
+        </div>
+        <br>
+        <button onclick="location.reload()">
+            Restart Quiz
+        </button>
+        `;
+
+    }
+
 }
 
-// Edit Question
-function editQuestion(subject,index,newQuestion){
+/* Basic ML Logic */
 
-    quizData[subject][index] = newQuestion;
+function adaptiveDifficulty(){
 
-    localStorage.setItem("quizData", JSON.stringify(quizData));
+    if(score <= 1){
 
-    alert("Question Updated Successfully");
+        return "Easy";
+
+    }else if(score == 2){
+
+        return "Medium";
+
+    }else{
+
+        return "Hard";
+
+    }
+
 }
+
+loadQuestion();
 
 </script>
 
 </body>
 </html>
-```
-
-# AI & ML Based Online Quiz Application
-
-## New ML Features Added
-
-This project is now upgraded into an AI-powered Quiz Application for students.
-
-### ML-Based Question Display System
-
-The application now supports:
-
-* Automatic display of 20 random questions
-* Smart question shuffling using ML logic
-* Step-by-step question navigation
-* Personalized quiz flow
-* Randomized subject-wise question prediction
-* Difficulty-based question selection
-* Student performance analysis
-* Auto score calculation
-* AI-style dashboard UI
-
-## ML Algorithm Logic
-
-The quiz system uses a basic Machine Learning style algorithm:
-
-```javascript
-// ML Based Random Question Selection
-function getRandomQuestions(subject,total=20){
-
-    const shuffled = quizData[subject].sort(() => 0.5 - Math.random());
-
-    return shuffled.slice(0,total);
-}
-```
-
-This algorithm:
-
-* Randomly selects 20 questions
-* Prevents same order every time
-* Creates adaptive quiz experience
-* Simulates ML prediction logic
-
-## Step-by-Step Question Navigation
-
-```javascript
-let currentQuestion = 0;
-let selectedQuestions = [];
-
-function showQuestion(){
-
-    const q = selectedQuestions[currentQuestion];
-
-    document.getElementById("quizForm").innerHTML = `
-
-    <div class="question">
-        <p>${q.question}</p>
-
-        ${q.options.map(option => `
-            <label>
-                <input type="radio" name="answer" value="${option}">
-                ${option}
-            </label><br>
-        `).join('')}
-
-    </div>
-
-    <button onclick="nextQuestion()">Next Question</button>
-
-    `;
-}
-```
-
-
