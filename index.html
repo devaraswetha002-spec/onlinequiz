@@ -470,20 +470,3 @@ function editQuestion(subject,index,newQuestion){
 </body>
 </html>
 
-
-    <div class="question">
-        <p>${q.question}</p>
-
-        ${q.options.map(option => `
-            <label>
-                <input type="radio" name="answer" value="${option}">
-                ${option}
-            </label><br>
-        `).join('')}
-
-    </div>
-
-    <button onclick="nextQuestion()">Next Question</button>
-
-    `;
-}
